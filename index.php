@@ -32,6 +32,23 @@ $posts = [
     ]
 ];
 
+function cutText(string $text, int $length = 300)
+{
+    $textWords = explode(' ', $text);
+    $newText = '';
+    $i = 0;
+
+    while (mb_strlen($newText) < $length && isset($textWords[$i])) {
+        $newText .= $textWords[$i] . ' ';
+        $i++;
+    }
+    if (count($textWords) > $i) {
+        $newText .= '...' . '<a href="#" class="post-text__more-link">Читать далее</a>';
+    }
+
+    return $newText;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -327,20 +344,20 @@ $posts = [
                         <h2><?= $post['heading'] ?></h2>
                     </header>
                     <div class="post__main">
-                        <?php if ($post['type'] == 'post-quote'): ?>
+                        <?php if ($post['type'] === 'post-quote'): ?>
                             <blockquote>
                                 <p>
-                                    <?= $post['content'] ?>
+                                    <?= cutText($post['content']) ?>
                                 </p>
                             </blockquote>
-                        <?php elseif ($post['type'] == 'post-text'): ?>
+                        <?php elseif ($post['type'] === 'post-text'): ?>
                             <p><?= $post['content'] ?></p>
-                        <?php elseif ($post['type'] == 'post-photo'): ?>
+                        <?php elseif ($post['type'] === 'post-photo'): ?>
                             <div class="post-photo__image-wrapper">
-                                <img src=<?= "img/" . $post['content'] ?> alt="Фото от пользователя" width="360"
-                                height="240">
+                                <img src="img/<?= $post['content'] ?>" alt="Фото от пользователя" width="360"
+                                     height="240">
                             </div>
-                        <?php elseif ($post['type'] == 'post-link'): ?>
+                        <?php elseif ($post['type'] === 'post-link'): ?>
                             <div class="post-link__wrapper">
                                 <a class="post-link__external" href="http://" title="Перейти по ссылке">
                                     <div class="post-link__info-wrapper">
@@ -352,7 +369,7 @@ $posts = [
                                             <h3><?= $post['heading'] ?></h3>
                                         </div>
                                     </div>
-                                    <span> <?= $post['content'] ?></span>
+                                    <span> <?= cutText($post['content']) ?></span>
                                 </a>
                             </div>
                         <?php endif; ?>
@@ -361,8 +378,8 @@ $posts = [
                         <div class="post__author">
                             <a class="post__author-link" href="#" title="Автор">
                                 <div class="post__avatar-wrapper">
-                                    <img class="post__author-avatar" src=<?= 'img/' . $post['avatar'] ?>
-                                    alt="Аватар пользователя">
+                                    <img class="post__author-avatar" src="img/<?= $post['avatar'] ?>"
+                                         alt="Аватар пользователя">
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"><?= $post['user_name'] ?></b>
